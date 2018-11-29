@@ -29,7 +29,7 @@ def wr_stats(s,w,t):
             if player.receiving_tds == 1:
                 msg = "%s,%d\n"
                 return msg % (player.name, wr[player.name])
-                qb[player.name] = 0  
+                wr[player.name] = 0  
                 
 def rb_stats(s,w,t):
     # methods made to find the number of yds caught before a td for a wr. 
