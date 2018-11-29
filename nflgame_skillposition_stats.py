@@ -1,6 +1,3 @@
-import nflgame
-from collections import defaultdict
-
 wr = defaultdict(int)
 qb = defaultdict(int)
 rb = defaultdict(int)
@@ -15,8 +12,10 @@ def qb_stats(s,w,t):
             qb[player.name] += player.passing_yds
             if player.passing_tds == 1:
                 msg = "%s,%d\n"
-                return msg % (player.name, qb[player.name])
-                qb[player.name] = 0
+                val = qb[player.name]
+                qb[player.name] = 0 
+                return msg % (player.name, val)
+                
 
 def wr_stats(s,w,t):
     # methods made to find the number of yds caught before a td for a wr. 
@@ -28,8 +27,10 @@ def wr_stats(s,w,t):
             wr[player.name] += player.receiving_yds
             if player.receiving_tds == 1:
                 msg = "%s,%d\n"
-                return msg % (player.name, wr[player.name])
-                wr[player.name] = 0  
+                val = wr[player.name]
+                wr[player.name] = 0 
+                return msg % (player.name, val)
+                 
                 
 def rb_stats(s,w,t):
     # methods made to find the number of yds caught before a td for a wr. 
@@ -41,8 +42,10 @@ def rb_stats(s,w,t):
             rb[player.name] += player.rushing_yds
             if player.rushing_tds == 1:
                 msg = "%s,%d\n"
-                return msg % (player.name, rb[player.name])
+                val = rb[player.name]
                 rb[player.name] = 0 
+                return msg % (player.name, val)
+                
 
 seasons = [2009,2010,2011,2012,2013,2014,2015,2016]
 weeks = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
@@ -95,3 +98,11 @@ for s in seasons:
                 continue
 f3.close()
 print "file rb_yds_until_td.csv complete"
+
+# next thing to do is make general stats at the game level for averages.
+# I will then be able to for each player, look at their avg yds per game, 
+# how long its been since a td, and then using the std see how 'close' they are to getting a td.
+
+# also need to put this data in the form a a bell curve. I want to know within how many MORE yds. For instance,
+# if Odell has 200 yds from his last td, what is the possibility he will score in the next game
+# given the stats produced from back data of ALL wr.
