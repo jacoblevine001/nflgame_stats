@@ -1,6 +1,7 @@
 wr = defaultdict(int)
 qb = defaultdict(int)
 rb = defaultdict(int)
+att = defaultdict(int) # used as a working dict to hold the number of attempts per each td.
 
 def qb_stats(s,w,t):
     # methods made to find the number of yds caught before a td for a wr. 
@@ -10,12 +11,16 @@ def qb_stats(s,w,t):
     for p in play:
         for player in p.players.passing():
             qb[player.name] += player.passing_yds
+            att[player.name] += 1
             if player.passing_tds == 1:
-                msg = "%s,%d\n"
+                msg = "%s,%d,%d\n"
                 val = qb[player.name]
+                val2 = att[player.name]
                 qb[player.name] = 0 
-                return msg % (player.name, val)
+                att[player.name] = 0
+                return msg % (player.name, val,val2)
                 
+att.clear() # working dict, needs to be cleared out in between data sets
 
 def wr_stats(s,w,t):
     # methods made to find the number of yds caught before a td for a wr. 
@@ -25,13 +30,17 @@ def wr_stats(s,w,t):
     for p in play:
         for player in p.players.receiving():
             wr[player.name] += player.receiving_yds
+            att[player.name] += 1
             if player.receiving_tds == 1:
-                msg = "%s,%d\n"
+                msg = "%s,%d,%d\n"
                 val = wr[player.name]
+                val2 = att[player.name]
                 wr[player.name] = 0 
-                return msg % (player.name, val)
+                att[player.name] = 0
+                return msg % (player.name, val,val2)
                  
-                
+att.clear()  
+
 def rb_stats(s,w,t):
     # methods made to find the number of yds caught before a td for a wr. 
     # can be found in "rb_yds_until_td.csv"
@@ -41,10 +50,12 @@ def rb_stats(s,w,t):
         for player in p.players.rushing():
             rb[player.name] += player.rushing_yds
             if player.rushing_tds == 1:
-                msg = "%s,%d\n"
+                msg = "%s,%d,%d\n"
                 val = rb[player.name]
+                val2 = att[player.name]
                 rb[player.name] = 0 
-                return msg % (player.name, val)
+                att[player.name] = 0
+                return msg % (player.name, val,val2)
                 
 
 seasons = [2009,2010,2011,2012,2013,2014,2015,2016]
@@ -58,7 +69,7 @@ teams = [
 ]
 
 f1=open('qb_yds_until_td.csv', 'w+')
-f1.write("QB, Yards Passed Until TD\n")
+f1.write("QB, Yards Passed Until TD,attemps\n")
 print "Creating file qb_yds_until_td.csv"
 for s in seasons:
     print "...loading data from ", s, "..."
@@ -72,7 +83,7 @@ f1.close()
 print "file qb_yds_until_td.csv complete"
 
 f2=open('wr_yds_until_td.csv', 'w+')
-f2.write("WR, Yards Rec Until TD\n")
+f2.write("WR, Yards Rec Until TD,attempts\n")
 print "Creating file wr_yds_until_td.csv"
 for s in seasons:
     print "...loading data from ", s, "..."
@@ -86,7 +97,7 @@ f2.close()
 print "file wr_yds_until_td.csv complete"
 
 f3=open('rb_yds_until_td.csv','w+')
-f3.write("RB, Yards Rushed Until TD\n")
+f3.write("RB, Yards Rushed Until TD,attempts\n")
 print "Creating file rb_yds_until_td.csv"
 for s in seasons:
     print "...loading data from ", s, "..."
@@ -98,6 +109,7 @@ for s in seasons:
                 continue
 f3.close()
 print "file rb_yds_until_td.csv complete"
+
 
 # next thing to do is make general stats at the game level for averages.
 # I will then be able to for each player, look at their avg yds per game, 
